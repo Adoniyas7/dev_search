@@ -8,6 +8,8 @@ class Profile(models.Model):
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
     name = models.CharField(max_length=200)
     email = models.EmailField(max_length=200)
+    username = models.CharField(max_length=200, blank=True, null=True)
+    location = models.CharField(max_length=200, blank=True, null=True)
     short_intro = models.CharField(max_length=200, blank=True, null=True)
     bio = models.TextField(max_length=200, blank=True, null=True)
     profile_pic =models.ImageField(upload_to="profile_pic/", default="profile_pic/default.png")
@@ -17,6 +19,16 @@ class Profile(models.Model):
     social_youtube = models.CharField(max_length=200, blank=True, null=True)
     social_website = models.CharField(max_length=200, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.name
+
+class Skill(models.Model):
+    id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    description = models.TextField(max_length=200, blank=True, null=True)
+    created_id = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return self.name

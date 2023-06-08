@@ -1,11 +1,12 @@
 from django.db import models
 from uuid import uuid4
+from users.models import Profile
 
 # Create your models here.
 
 class Project(models.Model):
     id = models.UUIDField(default = uuid4, unique=True, primary_key=True, editable=False)
-    # owner = models
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null= True)
     title = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
     featured_img = models.ImageField(upload_to="project_img")
