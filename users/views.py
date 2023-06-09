@@ -14,3 +14,6 @@ def user_profile(request, pk):
     other_skills = profile.skill_set.filter(description="")
     context = {"profile": profile, "top_skills":top_skills, "other_skills": other_skills}
     return render(request, "users/user-profile.html", context)
+
+def login(request):
+    return render(request, "users/login.html")
