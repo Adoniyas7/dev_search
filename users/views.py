@@ -51,6 +51,7 @@ def logout_user(request):
 
 def register_user(request):
     form = UserRegistrationForm()
+    context = {"page":"register", "form":form, "errors":[]}
 
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -64,10 +65,9 @@ def register_user(request):
         else:
             for field in form:
                 for error in field.errors:
-                    messages.error(request, error)
-            return redirect('register')
+                    context['errors'].append(error)
+            return render(request, "users/login.html", context)
 
 
-    context = {"page":"register", "form":form}
 
     return render(request, "users/login.html", context)
