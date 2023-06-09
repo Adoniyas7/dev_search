@@ -3,6 +3,7 @@ from .models import Profile
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserRegistrationForm
+from django.contrib import messages
 
 # Create your views here.
 
@@ -31,13 +32,15 @@ def login_users(request):
         try: 
             user = User.objects.get(username=username)
         except:
-            print("there is no user name with the provided")
+            messages.error(request, "Username doesn't exist")
         
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
             return redirect("profiles")
+        else:
+            messages.error       (request, "Username or Password is incorrect")
             
 
     return render(request, "users/login.html", context)
@@ -48,5 +51,23 @@ def logout_user(request):
 
 def register_user(request):
     form = UserRegistrationForm()
+
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower().stripe()
+            user.save()
+            messages.success(request, "User Created sucessfully")
+
+            return redirect("register")
+        else:
+            for field in form:
+                for error in field.errors:
+                    messages.error(request, error)
+            return redirect('register')
+
+
     context = {"page":"register", "form":form}
+
     return render(request, "users/login.html", context)
