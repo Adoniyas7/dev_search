@@ -7,6 +7,8 @@
           <a href="/">
             <img src="{% static 'images/icon.svg' %}" alt="icon" />
           </a>
+
+        {% if page == 'login' %}
           <h3>Account Login</h3>
           <p>Hello Developer, Welcome Back!</p>
         </div>
@@ -45,6 +47,8 @@
           <p>Don’t have an Account?</p>
           <a href="signup.html">Sign Up</a>
         </div>
+        {% endif %}
+
       </div>
     </div>
 {% endblock %}
