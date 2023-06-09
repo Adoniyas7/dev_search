@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Profile
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
+from .forms import UserRegistrationForm
 
 # Create your views here.
 
@@ -44,8 +44,9 @@ def login_users(request):
 
 def logout_user(request):
     logout(request)
-    return render(request, "users/profiles.html")
+    return redirect("profiles")
 
 def register_user(request):
-    context = {"page":"register"}
-    return redirect("profiles")
+    form = UserRegistrationForm()
+    context = {"page":"register", "form":form}
+    return render(request, "users/login.html", context)

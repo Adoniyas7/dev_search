@@ -56,51 +56,13 @@
 
         <form action="#" class="form auth__form">
           <!-- Input:Text -->
+          {% for field in form %}
           <div class="form__field">
-            <label for="formInput#text">Full Name: </label>
-            <input
-              class="input input--text"
-              id="formInput#text"
-              type="text"
-              name="text"
-              placeholder="e.g. Dennis Ivanov"
-            />
+            <label for="formInput#text">{{field.label}}</label>
+            {{field}}
           </div>
-
-          <!-- Input:Email -->
-          <div class="form__field">
-            <label for="formInput#email">Email Address: </label>
-            <input
-              class="input input--email"
-              id="formInput#email"
-              type="email"
-              name="email"
-              placeholder="e.g. user@domain.com"
-            />
-          </div>
-
-          <!-- Input:Password -->
-          <div class="form__field">
-            <label for="formInput#password">Password: </label>
-            <input
-              class="input input--password"
-              id="formInput#passowrd"
-              type="password"
-              name="password"
-              placeholder="••••••••"
-            />
-          </div>
-          <!-- Input:Password -->
-          <div class="form__field">
-            <label for="formInput#confirm-password">Confirm Password: </label>
-            <input
-              class="input input--password"
-              id="formInput#confirm-passowrd"
-              type="password"
-              name="confirm-password"
-              placeholder="••••••••"
-            />
-          </div>
+          {% endfor %}
+        
           <div class="auth__actions">
             <input class="btn btn--sub btn--lg" type="submit" value="Sign  In" />
           </div>
