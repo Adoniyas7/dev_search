@@ -7,7 +7,7 @@
                 <a class="backButton" href="#"><i class="im im-angle-left"></i></a>
                 <br>
                 <h3>Edit Account</h3>
-                <form class="form" method="POST" enctype="multipart/form-data">
+                <form class="form" method="POST" action="{% url 'edit-account' %}" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     {% for field in form %}
