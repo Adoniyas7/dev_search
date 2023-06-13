@@ -125,8 +125,22 @@ def edit_skill(request, pk):
     form = SkillForm(instance=skill)
     context = {"form":form}
     if request.method == 'POST':
+        form = SkillForm(request.POST, instance=skill)
         if form.is_valid():
-            skill = form.save(commit=False)
-            skill.owner = profile
+            form.save()
+            messages.success(request, "Skill updated sucessfully")
+            return redirect('user-account')
         
     return render(request, 'users/skill-form.html', context)
+
+def delete_skill(request, pk):
+    profile = request.user.profile
+    skill = profile.skill_set.get(id=pk)
+    context = {"skill":skill}
+
+    if request.method == 'POST':
+        skill.delete()
+        messages.success(request, "Skill deleted successfully")
+        return redirect('user-account')
+
+    return render(request, 'users/delete-skill.html', context)
