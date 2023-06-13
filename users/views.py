@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Profile
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from .forms import UserRegistrationForm, ProfileForm
+from .forms import UserRegistrationForm, ProfileForm, SkillForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -98,3 +98,35 @@ def edit_account(request):
             return redirect('edit-account')
 
     return render(request, 'users/profile-form.html', context)
+
+@login_required(login_url="login")
+def add_skill(request):
+    profile = request.user.profile
+    form = SkillForm()
+    context = {"form":form}
+
+    if request.method == 'POST':
+        print("Post")
+        form = SkillForm(request.POST)
+        if form.is_valid():
+            print("validddd")
+            skill = form.save(commit=False)
+            skill.owner = profile
+            skill.save()
+            messages.success(request, "Skill added sucessfully")
+            return redirect('user-account')
+        
+    return render(request, 'users/skill-form.html', context)
+
+@login_required(login_url="login")
+def edit_skill(request, pk):
+    profile = request.user.profile
+    skill = profile.skill_set.get(id=pk)
+    form = SkillForm(instance=skill)
+    context = {"form":form}
+    if request.method == 'POST':
+        if form.is_valid():
+            skill = form.save(commit=False)
+            skill.owner = profile
+        
+    return render(request, 'users/skill-form.html', context)
