@@ -59,11 +59,11 @@ def edit_project(request, pk):
 def delete_project(request, pk):
     profile = request.user.profile
     project = profile.project_set.get(id=pk)
-    context = {"project":project}
+    context = {"object":project}
     if request.method == 'POST':
         project.delete()
         messages.success(request, "Project deleted successfully")
         return redirect("projects")
 
         
-    return render(request, "projects/delete-project.html", context)
+    return render(request, "delete.html", context)
