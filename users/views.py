@@ -3,13 +3,21 @@ from .models import Profile
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserRegistrationForm, ProfileForm, SkillForm
+from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 def profiles(request):
-    profile = Profile.objects.all()
+    search_query = ''
+
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+        print(search_query)
+
+
+    profile = Profile.objects.filter(Q(name__icontains=search_query) | Q(short_intro__icontains=search_query))
     context = {"profiles": profile}
     return render(request, "users/profiles.html", context)
 
