@@ -1,24 +1,21 @@
 from django.shortcuts import render, redirect
-from .models import Profile
+from .models import Profile, Skill
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserRegistrationForm, ProfileForm, SkillForm
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .utils import search_profile
+
+
 
 # Create your views here.
 
 def profiles(request):
-    search_query = ''
-
-    if request.GET.get('search_query'):
-        search_query = request.GET.get('search_query')
-        print(search_query)
-
-
-    profile = Profile.objects.filter(Q(name__icontains=search_query) | Q(short_intro__icontains=search_query))
-    context = {"profiles": profile}
+    profiles, search_query = search_profile(request)
+   
+    context = {"profiles": profiles, "search_query":search_query}
     return render(request, "users/profiles.html", context)
 
 def user_profile(request, pk):
