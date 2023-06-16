@@ -3,6 +3,8 @@ from .models import Project, Tag, Review
 from .forms import ProjectForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Q
+from .utils import search_project
 
 # Create your views here.
 
@@ -10,8 +12,9 @@ def home(request):
     return render(request, "index.html")
 
 def projects(request):
-    projects = Project.objects.all()
-    context = {"projects": projects}
+    project_query, projects = search_project(request)
+                                          
+    context = {"projects": projects, "project_query": project_query}
     return render(request, "projects/projects.html", context)
 
 def project(request, pk):
