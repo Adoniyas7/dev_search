@@ -14,3 +14,4 @@ def search_profile(request):
                                     Q(skill__in= skill)
                                     )
     return profile, search_query
+

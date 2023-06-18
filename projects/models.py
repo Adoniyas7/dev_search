@@ -20,6 +20,9 @@ class Project(models.Model):
     def __str__(self) -> str:
         return self.title
     
+    class Meta:
+        ordering = ['-created_at']
+    
 class Tag(models.Model):
     id = models.UUIDField(default=uuid4, unique=True, primary_key=True, editable=False)
     name = models.CharField(max_length=200)
