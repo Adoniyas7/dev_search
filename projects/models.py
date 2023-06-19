@@ -21,7 +21,24 @@ class Project(models.Model):
         return self.title
     
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-vote_ratio', '-vote_count', 'title']
+
+    @property
+    def getVoteCount(self):
+        reviews = self.review_set.all()
+        upVote = reviews.filter(value="up").count()
+        totalVote = reviews.count()
+        ratio = (upVote/totalVote) * 100
+        self.vote_count = totalVote
+        self.vote_ratio = ratio
+        self.save()
+    
+    @property
+    def reviewers(self):
+        queryset = self.review_set.all().values_list('owner__id', flat=True)
+        return queryset
+
+
     
 class Tag(models.Model):
     id = models.UUIDField(default=uuid4, unique=True, primary_key=True, editable=False)
@@ -48,5 +65,15 @@ class Review(models.Model):
 
     def __str__(self) -> str:
         return self.value
+    
+    # def getVoteCount(self):
+    #     reviews = self.review_set.all()
+    #     upVote = reviews.filter(value="up").count()
+    #     totalVote = reviews.count()
+    #     ratio = (upVote/totalVote) * 100
+    #     self.project.vote_count = totalVote
+    #     self.project.vote_ratio = ratio
+    #     self.project.save()
+    #     self.save()
 
 
