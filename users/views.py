@@ -6,7 +6,7 @@ from .forms import UserRegistrationForm, ProfileForm, SkillForm
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .utils import search_profile
+from .utils import search_profile, paginate_profiles
 
 
 
@@ -14,8 +14,9 @@ from .utils import search_profile
 
 def profiles(request):
     profiles, search_query = search_profile(request)
+    custom_range, profiles = paginate_profiles(request, profiles, 3)
    
-    context = {"profiles": profiles, "search_query":search_query}
+    context = {"profiles": profiles, "search_query":search_query, "custom_range": custom_range}
     return render(request, "users/profiles.html", context)
 
 def user_profile(request, pk):
