@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Profile, Skill
+from .models import Profile, Skill, Message
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserRegistrationForm, ProfileForm, SkillForm
@@ -150,3 +150,11 @@ def delete_skill(request, pk):
         return redirect('user-account')
 
     return render(request, 'delete.html', context)
+
+@login_required(login_url="login")
+def inbox(request):
+    profile = request.user.profile
+    messageRequests = profile.messages.all()
+    unreadCount = messageRequests.filter(is_read=False).count()
+    context ={"messageRequests":messageRequests, "unreadCount":unreadCount}
+    return render(request, 'users/inbox.html', context)
