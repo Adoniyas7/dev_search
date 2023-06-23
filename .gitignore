@@ -2,3 +2,4 @@ env/
 resources/
 __pycache__/
 dev_search/__pycache__/
+.env
